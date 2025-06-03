@@ -1,13 +1,31 @@
 import { useState } from "react";
 import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import Dice from "./components/Dice";
 
 export default function App() {
-  const [count, setCount] = useState(0);
-
+  const DiceArray = Array.from({ length: 10 }, ()=>Math.floor(Math.random() * 6 ));
+  const [rolls, setRolls] = useState(DiceArray);
+  function rollDice() {
+    setRolls(DiceArray)
+  }
   return (
     <main>
-      Tenzies
+      <section className="info">
+        <h2>Tenzies</h2>
+        <p>
+          Roll until all dice are the same. Click each die to freeze it at its
+          current value between rolls.
+        </p>
+      </section>
+      <section className="dice">
+        {DiceArray.map((number, index) => (
+          <Dice
+            key={index}
+            number={number}
+          />
+        ))}
+      </section>
+      <button className="roll-button" onClick={rollDice}>Roll</button>
     </main>
   );
 }
