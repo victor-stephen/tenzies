@@ -1,6 +1,6 @@
 import { useState } from "react";
 import reactLogo from "./assets/react.svg";
-import Dice from "./components/Dice";
+import Die from "./components/Die";
 
 export default function App() {
   const DiceArray = Array.from({ length: 10 }, ()=>Math.floor(Math.random() * 6 ));
@@ -19,9 +19,9 @@ export default function App() {
       </section>
       <section className="dice">
         {DiceArray.map((number, index) => (
-          <Dice
+          <Die
             key={index}
-            number={number}
+            value={number}
           />
         ))}
       </section>
