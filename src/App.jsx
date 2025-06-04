@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
+import Confetti from "react-confetti";
+// import { useWindowSize } from "react-use";
 import Die from "./components/Die";
 
 export default function App() {
-  const [dice, setDice] = useState(generateAllNewDice());
+  const [dice, setDice] = useState(() => generateAllNewDice());
 
-  const data = {
-    playerId: 1,
-    diceHeld: null,
-  };
+  let gameWon = dice.every(
+    (die, index) => die.isHeld === true && dice[0].value === dice[index].value
+  );
 
   // random dice generator
   function generateAllNewDice() {
@@ -24,17 +25,18 @@ export default function App() {
 
   // roll dice
   function rollDice() {
-    setDice((prevDice) =>
-      prevDice.map((prevDie) =>
-        prevDie.isHeld
-          ? { ...prevDie }
-          : {
-              ...prevDie,
-              value: Math.ceil(Math.random() * 6),
-            isHeld: false
-            }
-      )
-    );
+    gameWon
+      ? setDice(generateAllNewDice())
+      : setDice((prevDice) =>
+          prevDice.map((prevDie) =>
+            prevDie.isHeld
+              ? prevDie
+              : {
+                  ...prevDie,
+                  value: Math.ceil(Math.random() * 6),
+                }
+          )
+        );
   }
 
   function holdDice(dieId) {
@@ -49,6 +51,7 @@ export default function App() {
 
   return (
     <main>
+        {gameWon&& <Confetti />}
       <section className="info">
         <h2>Tenzies</h2>
         <p>
@@ -70,7 +73,7 @@ export default function App() {
         className="roll-button"
         onClick={rollDice}
       >
-        Roll
+        {gameWon ? "New Game" : "Roll"}
       </button>
     </main>
   );
