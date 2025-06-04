@@ -1,5 +1,24 @@
-export default function Die({value}) {
+export default function Die({ dieObj, holdDice }) {
+  // console.log(dieObj)
+  const styles = {
+    background: dieObj.isHeld ? "#59E391":"#fff",
+    boxShadow: "0px 2px 2px 0px rgba(0, 0, 0, 0.15)",
+    borderRadius: "5px",
+    textAlign: "center",
+    fontWeight: "700",
+    fontSize: "1.287rem",
+    alignItems: "center",
+    lineHeight: "60px",
+    border: "none",
+  }
+
   return (
-    <button className="die">{value+1}</button>
-  )
+    <button
+      onClick={holdDice}
+      className="die"
+      style={styles}
+    >
+      {dieObj.value}
+    </button>
+  );
 }

@@ -1,13 +1,50 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
+import { useEffect, useState } from "react";
+import { nanoid } from "nanoid";
 import Die from "./components/Die";
 
 export default function App() {
-  const DiceArray = Array.from({ length: 10 }, ()=>Math.floor(Math.random() * 6 ));
-  const [rolls, setRolls] = useState(DiceArray);
-  function rollDice() {
-    setRolls(DiceArray)
+  const [dice, setDice] = useState(generateAllNewDice());
+
+  const data = {
+    playerId: 1,
+    diceHeld: null,
+  };
+
+  // random dice generator
+  function generateAllNewDice() {
+    const DiceArray = Array.from({ length: 10 }, () => {
+      return {
+        value: Math.ceil(Math.random() * 6),
+        isHeld: false,
+        dieId: nanoid(),
+      };
+    });
+    return DiceArray;
   }
+
+  // roll dice
+  function rollDice() {
+    setDice((prevScores) =>
+      prevScores.map((val) => {
+        if (val.isHeld) return { ...val };
+        return {
+          value: Math.ceil(Math.random() * 6),
+          isHeld: false,
+        };
+      })
+    );
+  }
+
+  function holdDice(dieId) {
+    console.log(dieId);
+    setDice((prevDice) =>
+      prevDice.map((prevDie, index) => {
+        if (prevDie.dieId === dieId) return { ...prevDie, isHeld: true };
+        return { ...prevDie };
+      })
+    );
+  }
+
   return (
     <main>
       <section className="info">
@@ -18,14 +55,21 @@ export default function App() {
         </p>
       </section>
       <section className="dice">
-        {DiceArray.map((number, index) => (
-          <Die
-            key={index}
-            value={number}
-          />
-        ))}
+        {dice &&
+          dice.map((dieObj, index) => (
+            <Die
+              key={dieObj.dieId}
+              dieObj={dieObj}
+              holdDice={() => holdDice(dieObj.dieId)}
+            />
+          ))}
       </section>
-      <button className="roll-button" onClick={rollDice}>Roll</button>
+      <button
+        className="roll-button"
+        onClick={rollDice}
+      >
+        Roll
+      </button>
     </main>
   );
 }
