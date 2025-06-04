@@ -24,24 +24,26 @@ export default function App() {
 
   // roll dice
   function rollDice() {
-    setDice((prevScores) =>
-      prevScores.map((val) => {
-        if (val.isHeld) return { ...val };
-        return {
-          value: Math.ceil(Math.random() * 6),
-          isHeld: false,
-        };
-      })
+    setDice((prevDice) =>
+      prevDice.map((prevDie) =>
+        prevDie.isHeld
+          ? { ...prevDie }
+          : {
+              ...prevDie,
+              value: Math.ceil(Math.random() * 6),
+            isHeld: false
+            }
+      )
     );
   }
 
   function holdDice(dieId) {
-    console.log(dieId);
     setDice((prevDice) =>
-      prevDice.map((prevDie, index) => {
-        if (prevDie.dieId === dieId) return { ...prevDie, isHeld: true };
-        return { ...prevDie };
-      })
+      prevDice.map((prevDie) =>
+        prevDie.dieId === dieId
+          ? { ...prevDie, isHeld: !prevDie.isHeld }
+          : { ...prevDie }
+      )
     );
   }
 
