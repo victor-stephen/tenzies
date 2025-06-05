@@ -23,8 +23,7 @@ export default function App() {
   function generateAllNewDice() {
     const DiceArray = Array.from({ length: 10 }, () => {
       return {
-        value: 5,
-        // value: Math.ceil(Math.random() * 6),
+        value: Math.ceil(Math.random() * 6),
         isHeld: false,
         dieId: nanoid(),
       };
